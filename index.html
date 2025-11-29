@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversion Rate Calculator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .result-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .result-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .result-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        .error.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Conversion Rate Calculator</h1>
+        
+        <div class="input-group">
+            <label for="clicks">Total Clicks</label>
+            <input type="number" id="clicks" placeholder="Enter number of clicks" min="0">
+        </div>
+        
+        <div class="input-group">
+            <label for="orders">Total Orders</label>
+            <input type="number" id="orders" placeholder="Enter number of orders" min="0">
+        </div>
+        
+        <div class="error" id="error">⚠️ Orders cannot exceed clicks</div>
+        
+        <div class="result-box">
+            <div class="result-label">Conversion Rate</div>
+            <div class="result-value" id="result">---%</div>
+        </div>
+    </div>
+
+    <script>
+        const clicksInput = document.getElementById('clicks');
+        const ordersInput = document.getElementById('orders');
+        const resultDisplay = document.getElementById('result');
+        const errorDisplay = document.getElementById('error');
+
+        function calculateConversion() {
+            const clicks = parseFloat(clicksInput.value);
+            const orders = parseFloat(ordersInput.value);
+            
+            // Reset error
+            errorDisplay.classList.remove('show');
+            
+            // Check for valid inputs
+            if (isNaN(clicks) || isNaN(orders) || clicks === 0) {
+                resultDisplay.textContent = '---%';
+                return;
+            }
+            
+            // Check if orders exceed clicks
+            if (orders > clicks) {
+                errorDisplay.classList.add('show');
+                resultDisplay.textContent = '---%';
+                return;
+            }
+            
+            // Calculate and display result
+            const rate = ((orders / clicks) * 100).toFixed(2);
+            resultDisplay.textContent = rate + '%';
+        }
+
+        clicksInput.addEventListener('input', calculateConversion);
+        ordersInput.addEventListener('input', calculateConversion);
+    </script>
+</body>
+</html>
